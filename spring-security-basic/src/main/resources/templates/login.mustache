@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Page</title>
+</head>
+<body>
+<h1>welcome!</h1>
+<form action="/loginProc" method="post" name="loginForm">
+    <input type="text" name="username" id="username" placeholder="아이디를 입력해주세요" />
+    <input type="password" name="password" id="password" placeholder="비밀번호를 입력해주세요 "/>
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+    <input type="submit" value="로그인" />
+</form>
+</body>
+</html>
