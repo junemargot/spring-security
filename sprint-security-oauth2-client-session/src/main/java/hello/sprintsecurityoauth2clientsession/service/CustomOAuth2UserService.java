@@ -1,9 +1,6 @@
 package hello.sprintsecurityoauth2clientsession.service;
 
-import hello.sprintsecurityoauth2clientsession.dto.CustomOAuth2User;
-import hello.sprintsecurityoauth2clientsession.dto.GoogleResponse;
-import hello.sprintsecurityoauth2clientsession.dto.NaverResponse;
-import hello.sprintsecurityoauth2clientsession.dto.OAuth2Response;
+import hello.sprintsecurityoauth2clientsession.dto.*;
 import hello.sprintsecurityoauth2clientsession.entity.User;
 import hello.sprintsecurityoauth2clientsession.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +39,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     } else if(registrationId.equals("google")) {
       oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
+
+    } else if(registrationId.equals("kakao")) {
+      oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
 
     } else {
       return null;
