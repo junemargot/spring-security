@@ -36,6 +36,7 @@ public class SecurityConfig {
     // OAuth2
     http
             .oauth2Login((oauth2) -> oauth2
+                    .loginPage("/login")
                     .userInfoEndpoint((userInfoEndpointConfig) ->
                             userInfoEndpointConfig.userService(customOAuth2UserService))
                     );
@@ -43,7 +44,7 @@ public class SecurityConfig {
     // 경로 인가 설정
     http
             .authorizeHttpRequests((auth) -> auth
-                    .requestMatchers("/", "/oauth2/**", "/login/**").permitAll()
+                    .requestMatchers("/", "/oauth2/**", "/login/**", "/images/**").permitAll()
                     .anyRequest().authenticated());
 
     return http.build();
