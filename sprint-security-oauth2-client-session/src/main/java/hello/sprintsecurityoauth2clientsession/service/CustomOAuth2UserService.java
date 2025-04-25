@@ -4,6 +4,8 @@ import hello.sprintsecurityoauth2clientsession.dto.CustomOAuth2User;
 import hello.sprintsecurityoauth2clientsession.dto.GoogleResponse;
 import hello.sprintsecurityoauth2clientsession.dto.NaverResponse;
 import hello.sprintsecurityoauth2clientsession.dto.OAuth2Response;
+import hello.sprintsecurityoauth2clientsession.entity.User;
+import hello.sprintsecurityoauth2clientsession.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -15,6 +17,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   // DefaultOAuth2UserService OAuth2UserService의 구현체이다. OAuth2UserService를 상속받아도 되고, 상관없다.
+
+  private final UserRepository userRepository;
+
+  public CustomOAuth2UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -39,7 +47,26 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       return null;
     }
 
+    String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
+    User existUser = userRepository.findByUsername(username);
     String role = "ROLE_USER";
+
+    if(existUser == null) {
+      User user = new User();
+      user.setUsername(username);
+      user.setEmail(oAuth2Response.getEmail());
+      user.setRole(role);
+
+      userRepository.save(user);
+
+    } else {
+      existUser.setUsername(username);
+      existUser.setEmail(oAuth2Response.getEmail());
+      role = existUser.getRole();
+      userRepository.save(existUser);
+    }
+
+//    String role = "ROLE_USER";
 
     return new CustomOAuth2User(oAuth2Response, role);
   }
