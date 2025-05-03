@@ -1,4 +1,4 @@
-package repository;
+package hello.oauth2jwt.repository;
 
 import hello.oauth2jwt.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
